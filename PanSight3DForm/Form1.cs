@@ -30,6 +30,8 @@ namespace PanSight3DForm
         enum TEST_TYPE { TEST_TYPE_GRAB_PNTS_CLOUD, TEST_TYPE_LOOP_GRAB, TEST_TYPE_PROFILES };
 
         TEST_TYPE m_testType = TEST_TYPE.TEST_TYPE_GRAB_PNTS_CLOUD;
+
+        TcpServer server;
         #endregion
         public Form1()
         {
@@ -37,6 +39,10 @@ namespace PanSight3DForm
             m_camera.DepthEvent += onDepth;
            
             m_camera.prepare();
+            server = new TcpServer(3000);
+            server.CommandReceived += Server_CommandReceived;
+            server.ClientConnected += Server_ClientConnected;
+            server.ClientDisconnected += Server_ClientDisconnected;
         }
 
         private void M_camera_ImageEvent(IntPtr arg1, CameraWrapper.SG_IMGDATA_PARAM arg2, IntPtr arg3)
@@ -596,6 +602,34 @@ namespace PanSight3DForm
         {
 
             CameraSyn.LibRelease();
+        }
+
+        private void Server_ClientDisconnected(object sender, EventArgs e)
+        {
+            Console.WriteLine("有客户端断开");
+        }
+
+        private void Server_ClientConnected(object sender, EventArgs e)
+        {
+            Console.WriteLine("有客户端连接");
+        }
+
+        private void Server_CommandReceived(object sender, string command)
+        {
+            switch (command)
+            {
+                case "start":
+                    buttonStart_Click(sender,null);
+                    break;
+                case "softOnce":
+                    buttonCapture_Click(sender, null);
+                    break;
+                case "stop":
+                    buttonStop_Click(sender, null);
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }

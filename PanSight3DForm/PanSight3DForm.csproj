@@ -108,6 +108,7 @@
     <Compile Include="GzLinearDetection.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="TcpServer.cs" />
     <EmbeddedResource Include="DetectForm1.resx">
       <DependentUpon>DetectForm1.cs</DependentUpon>
     </EmbeddedResource>
